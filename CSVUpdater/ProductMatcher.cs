@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CSVUpdater
@@ -10,11 +11,18 @@ namespace CSVUpdater
         {
             List<NewTplxProduct> newTplxProducts = new List<NewTplxProduct>();
 
-            tplxProducts.ForEach(product =>
+            tplxProducts.ForEach(tplxProduct =>
             {
+                var newDescription = quickBooksProducts.Where(quickbooksProduct => quickbooksProduct.ItemName.Equals(tplxProduct.Sku)).SingleOrDefault()?.ItemDescription;
 
+                newTplxProducts.Add(new NewTplxProduct
+                {
+                    Name = tplxProduct.Name,
+                    Sku = tplxProduct.Sku,
+                    Description = newDescription
+                });
             });
-            return null;
+            return newTplxProducts;
         }
     }
 }

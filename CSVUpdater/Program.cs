@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CSVUpdater
@@ -6,19 +7,20 @@ namespace CSVUpdater
     class Program
     {
         static void Main(string[] args)
-        {
-            //while (true)
-            //{
-            //    Console.WriteLine("Please input the file path of the QuickBooks CSV:");
-            //    var copyFromPath = Console.ReadLine();
-            //    if(Path.IsPathFullyQualified(copyFromPath))
-            //}
+        {      
+            string quickbooksPath = UserInputHelper.RequestForQuickbosksPath();
+            string tplxPath = UserInputHelper.RequestForTplxPath();
+            string newFileCreationPath = UserInputHelper.RequestForNewFilePath();
 
-            Console.WriteLine("Please input the file path of the Teaplixx CSV:");
-            var copyToPath = Console.ReadLine();
+            Console.WriteLine($@"Building new CSV... Your file will be created here: {newFileCreationPath}");
 
-            Console.WriteLine("Please input the file path of where you want the new file to be located:");
-            var newFileCreationPath = Console.ReadLine();
+            List<QuickBooksProduct> quickbooksProducts = FileHelper.GetQuickBooksRecords(quickbooksPath);
+            List<TplxProduct> tplxProducts = FileHelper.GetTplxRecords(tplxPath);
+            List<NewTplxProduct> newTplxProducts = ProductMatcher.MatchProducts(quickbooksProducts, tplxProducts);
+
+            FileHelper.WriteToNewCSV(newTplxProducts, newFileCreationPath);
+
+            Console.WriteLine("Completed successfully.");
         }
     }
 }
