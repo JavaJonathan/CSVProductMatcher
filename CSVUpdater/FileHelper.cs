@@ -50,7 +50,7 @@ namespace CSVUpdater
 
         public static bool FilePathIsValid(string filePath)
         {
-            return filePath.IndexOfAny(Path.GetInvalidPathChars()) == -1 && filePath.EndsWith(".csv");
+            return filePath.IndexOfAny(Path.GetInvalidPathChars()) == -1 && (filePath.EndsWith(".csv") || filePath.EndsWith(".xlsx"));
         }
     }
 }
